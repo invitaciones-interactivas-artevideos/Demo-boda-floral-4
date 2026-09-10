@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Web</title>
+
+    <!-- Tipografías de Google Fonts idénticas a la imagen -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome para íconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* =====================================================
+           CONFIGURACIÓN DE ESTILOS Y VARIABLES
+           ===================================================== */
+        :root {
+            --color-fondo: #faf8f5;
+            --color-texto: #2c2825;
+            --color-texto-suave: #686058;
+            --color-dorado: #b89762;
+            --color-dorado-suave: #d9c39e;
+            --color-boton-plateado: linear-gradient(180deg, #e8e8e8 0%, #c5c5c5 100%);
+            --color-sello: #7a4e32;
+            
+            --fuente-script: 'Alex Brush', cursive;
+            --fuente-serif: 'Cormorant Garamond', serif;
+            --fuente-sans: 'Montserrat', sans-serif;
+
+            --radio-esquinas: 16px;
+            --velocidad: 0.35s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto);
+            font-family: var(--fuente-serif);
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+        }
+
+        .invitacion-container {
+            width: 100%;
+            max-width: 480px;
+            background-color: #ffffff;
+            min-height: 100dvh;
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.06);
+            padding-bottom: 60px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* --- ILUSTRACIONES BOTÁNICAS SVG EN LAS ESQUINAS --- */
+        .hoja-esquina {
+            position: absolute;
+            width: 130px;
+            height: auto;
+            pointer-events: none;
+            z-index: 2;
+        }
+        .top-left { top: -10px; left: -10px; }
+        .top-right { top: -10px; right: -10px; transform: scaleX(-1); }
+        .bottom-right { bottom: 10px; right: -10px; transform: scaleY(-1); }
+
+        /* --- PORTADA / SOBRE DE ENTRADA (IMAGEN 4) --- */
+        .portada-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100dvh;
+            background-color: #f2ede6;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+        }
+
+        .portada-overlay.abierto {
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .encabezado-sobre {
+            font-family: var(--fuente-serif);
+            font-size: 1.8rem;
+            letter-spacing: 3px;
+            color: #4a423a;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .sobre-papel {
+            width: 100%;
+            max-width: 340px;
+            height: 230px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #e0d8cd;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Líneas de la solapa del sobre */
+        .sobre-papel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 110px;
+            background: #fdfbf7;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            border-bottom: 1px solid #e0d8cd;
+        }
+
+        .sello-cera {
+            width: 70px;
+            height: 70px;
+            background: radial-gradient(circle at 30% 30%, #a0633f, #63381e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d1ab7f;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 12px rgba(99, 56, 30, 0.4), inset 0 0 8px rgba(0,0,0,0.3);
+            border: 2px solid #855333;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.2s ease;
+            animation: pulso 2s infinite;
+        }
+
+        .sello-cera:active { transform: scale(0.95); }
+
+        @keyframes pulso {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+
+        .texto-instruccion-sobre {
+            font-family: var(--fuente-serif);
+            font-style: italic;
+            font-size: 1.3rem;
+            color: #4a423a;
+            margin-top: 35px;
+        }
+
+        /* --- CONTENIDO PRINCIPAL (IMAGEN 1) --- */
+        section {
+            padding: 25px 20px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .titulo-evento-chico {
+            font-family: var(--fuente-serif);
+            font-size: 1.5rem;
+            color: #38322c;
+            margin-top: 15px;
+        }
+
+        .nombres-principales {
+            font-family: var(--fuente-script);
+            font-size: clamp(3.2rem, 11vw, 4.5rem);
+            color: #1a1715;
+            line-height: 1.1;
+            margin: 10px 0;
+        }
+
+        .fecha-subtitulo {
+            font-family: var(--fuente-serif);
+            font-style: italic;
+            font-size: 1.35rem;
+            color: #38322c;
+            margin-bottom: 25px;
+        }
+
+        /* Botón de Reproducción "Poné Play" */
+        .contenedor-play {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin: 15px 0 25px;
+            cursor: pointer;
+        }
+
+        .btn-play-icono {
+            width: 44px;
+            height: 44px;
+            background-color: #5c4e3e;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease;
+        }
+
+        .btn-play-icono:active { transform: scale(0.92); }
+
+        .texto-play {
+            font-family: var(--fuente-serif);
+            font-size: 1.2rem;
+            color: #38322c;
+        }
+
+        /* Marco Dorado Circular con Flores (Imagen 1) */
+        .marco-dorado-contenedor {
+            position: relative;
+            width: 270px;
+            height: 270px;
+            margin: 10px auto 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .circulo-dorado-doble {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--color-dorado);
+            box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4px var(--color-dorado-suave);
+        }
+
+        .titulo-cuanto-falta {
+            font-family: var(--fuente-script);
+            font-size: 2.5rem;
+            color: #2c2825;
+            margin-bottom: 5px;
+            z-index: 2;
+        }
+
+        .contador-numeros {
+            font-family: var(--fuente-serif);
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            color: #2c2825;
+            z-index: 2;
+        }
+
+        .contador-etiquetas {
+            display: flex;
+            gap: 12px;
+            font-family: var(--fuente-sans);
+            font-size: 0.6rem;
+            letter-spacing: 1px;
+            color: var(--color-texto-suave);
+            text-transform: uppercase;
+            margin-top: 2px;
+            z-index: 2;
+        }
+
+        .flores-base-circulo {
+            position: absolute;
+            bottom: -18px;
+            width: 140px;
+            height: auto;
+            z-index: 4;
+        }
+
+        /* --- SECCIÓN DETALLES / CEREMONIA / LA FIESTA (IMAGEN 2) --- */
+        .icono-lineal {
+            width: 60px;
+            height: auto;
+            margin-bottom: 8px;
+            opacity: 0.85;
+        }
+
+        .titulo-seccion-script {
+            font-family: var(--fuente-script);
+            font-size: 2.8rem;
+            color: #2c2825;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .texto-detalle-bold {
+            font-family: var(--fuente-serif);
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #2c2825;
+        }
+
+        .texto-detalle {
+            font-family: var(--fuente-serif);
+            font-size: 1.15rem;
+            color: #4a423a;
+            margin-bottom: 3px;
+        }
+
+        .separador-bloque {
+            margin: 35px 0;
+        }
+
+        /* Botón de "CÓMO LLEGAR" estilo cápsula plateada */
+        .btn-llegar-capsula {
+            display: inline-block;
+            background: var(--color-boton-plateado);
+            color: #333333;
+            font-family: var(--fuente-sans);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 9px 32px;
+            border-radius: 25px;
+            border: 1px solid #b0b0b0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+            margin-top: 15px;
+            transition: transform 0.2s;
+        }
+
+        .btn-llegar-capsula:active { transform: scale(0.96); }
+
+        /* Botones Generales para Formularios/Regalos */
+        .btn-general {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background-color: #5c4e3e;
+            color: #ffffff;
+            font-family: var(--fuente-sans);
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 30px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-top: 12px;
+            width: 100%;
+            max-width: 260px;
+        }
+
+        /* Carrusel / Galería de Fotos */
+        .carrusel-box {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+
+        .carrusel-track {
+            display: flex;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .carrusel-slide {
+            min-width: 100%;
+        }
+
+        .carrusel-slide img {
+            width: 100%;
+            height: 330px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .carrusel-flecha {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.75);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 5;
+        }
+        .carrusel-flecha.prev { left: 8px; }
+        .carrusel-flecha.next { right: 8px; }
+
+        /* Modales (Regalos / Lightbox) */
+        .modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100dvh;
+            background: rgba(0,0,0,0.7);
+            z-index: 9995;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--velocidad) ease;
+            padding: 20px;
+        }
+
+        .modal.activo {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #ffffff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            position: relative;
+        }
+
+        .cerrar-btn {
+            position: absolute;
+            top: 12px; right: 15px;
+            background: none; border: none;
+            font-size: 1.3rem; color: #888;
+            cursor: pointer;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333; color: #fff;
+            padding: 10px 20px; border-radius: 20px;
+            font-family: var(--fuente-sans); font-size: 0.8rem;
+            transition: transform 0.3s ease; z-index: 10000;
+        }
+        .toast.visible { transform: translateX(-50%) translateY(0); }
+
+        .oculto { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- REPRODUCTOR DE MÚSICA OCULTO -->
+    <audio id="audio-invitacion" src="./musica.mp3" loop preload="auto"></audio>
+
+    <!-- PORTADA TIPO SOBRE (IMAGEN 4) -->
+    <div id="portada" class="portada-overlay">
+        <div class="encabezado-sobre" id="portada-encabezado">MIS 15 AÑOS</div>
+        <div class="sobre-papel">
+            <div class="sello-cera" onclick="abrirInvitacion()">
+                <i class="fa-solid fa-leaf"></i>
+            </div>
+        </div>
+        <div class="texto-instruccion-sobre">Presioná el sobre para ingresar a la invitación</div>
+    </div>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="invitacion-container">
+
+        <!-- ILUSTRACIONES BOTÁNICAS SVG (IMAGEN 1) -->
+        <svg class="hoja-esquina top-left" viewBox="0 0 100 100">
+            <path d="M10,10 Q40,10 60,40 Q30,70 10,10" fill="#6b7c59" opacity="0.7"/>
+            <path d="M10,10 Q20,50 70,70 Q40,80 10,10" fill="#889975" opacity="0.6"/>
+        </svg>
+        <svg class="hoja-esquina top-right" viewBox="0 0 100 100">
+            <path d="M10,10 Q40,10 60,40 Q30,70 10,10" fill="#6b7c59" opacity="0.7"/>
+            <path d="M10,10 Q20,50 70,70 Q40,80 10,10" fill="#889975" opacity="0.6"/>
+        </svg>
+
+        <!-- SECCIÓN PRINCIPAL (IMAGEN 1) -->
+        <section id="sec-header">
+            <div class="titulo-evento-chico" id="txt-bienvenida">Nos casamos</div>
+            <div class="nombres-principales" id="txt-nombre">José & Claudia</div>
+            <div class="fecha-subtitulo" id="txt-fecha-hora">12 diciembre 2026, 19:00 hs.</div>
+
+            <!-- BOTÓN "PONÉ PLAY" -->
+            <div class="contenedor-play" onclick="toggleMusica()">
+                <div class="btn-play-icono" id="btn-play-icon">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <div class="texto-play">Poné Play</div>
+            </div>
+
+            <!-- MARCO CIRCULAR DORADO CUENTA REGRESIVA (IMAGEN 1) -->
+            <div class="marco-dorado-contenedor">
+                <div class="circulo-dorado-doble"></div>
+                <div class="titulo-cuanto-falta">¿Cuánto falta?</div>
+                <div class="contador-numeros" id="contador-string">0 : 00 : 00 : 00</div>
+                <div class="contador-etiquetas">
+                    <span>DÍAS</span>
+                    <span>HORAS</span>
+                    <span>MINUTOS</span>
+                    <span>SEGUNDOS</span>
+                </div>
+
+                <!-- SVG RAMO DE FLORES BASE DEL CIRCULO -->
+                <svg class="flores-base-circulo" viewBox="0 0 100 40">
+                    <circle cx="50" cy="20" r="6" fill="#f4ece1"/>
+                    <circle cx="42" cy="18" r="5" fill="#ffffff"/>
+                    <circle cx="58" cy="18" r="5" fill="#ffffff"/>
+                    <path d="M30,25 Q45,15 50,20 Q55,15 70,25" stroke="#6b7c59" stroke-width="2" fill="none"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- SECCIÓN DETALLES Y EVENTOS (IMAGEN 2) -->
+        <section id="sec-eventos">
+            
+            <!-- CEREMONIA -->
+            <div class="separador-bloque" id="bloque-ceremonia">
+                <!-- SVG Anillos de Boda -->
+                <svg class="icono-lineal" viewBox="0 0 64 64" stroke="#a0855b" stroke-width="2" fill="none">
+                    <circle cx="26" cy="36" r="14"/>
+                    <circle cx="38" cy="36" r="14"/>
+                    <path d="M20,22 Q32,10 44,22" stroke-linecap="round"/>
+                </svg>
+                <div class="titulo-seccion-script">Ceremonia</div>
+                <div class="texto-detalle" id="txt-ceremonia-hora">Hora: 19:00 hs</div>
+                <div class="texto-detalle-bold" id="txt-ceremonia-lugar">Chacra San José</div>
+                <div class="texto-detalle" id="txt-ceremonia-dir">Cno. de la Redención 7095.</div>
+            </div>
+
+            <!-- FIESTA -->
+            <div class="separador-bloque" id="bloque-fiesta">
+                <!-- SVG Copas de Champán -->
+                <svg class="icono-lineal" viewBox="0 0 64 64" stroke="#a0855b" stroke-width="2" fill="none">
+                    <path d="M20,16 L28,34 L28,50 M16,50 L40,50 M28,34 L12,16 Z"/>
+                    <path d="M44,16 L36,34 L36,50 M48,50 L24,50 M36,34 L52,16 Z"/>
+                </svg>
+                <div class="titulo-seccion-script">La fiesta</div>
+                <div class="texto-detalle" id="txt-fiesta-hora">Al finalizar la ceremonia.</div>
+                <div class="texto-detalle-bold" id="txt-fiesta-lugar">Chacra San José</div>
+                <div class="texto-detalle" id="txt-fiesta-dir">Cno. de la Redención 7095.</div>
+
+                <a id="btn-mapa" href="#" target="_blank" class="btn-llegar-capsula">CÓMO LLEGAR</a>
+            </div>
+
+            <!-- DRESS CODE -->
+            <div class="separador-bloque" id="sec-dresscode">
+                <!-- SVG Traje / Vestido -->
+                <svg class="icono-lineal" viewBox="0 0 64 64" stroke="#a0855b" stroke-width="2" fill="none">
+                    <path d="M18,16 L26,24 L26,52 L10,52 Z"/>
+                    <path d="M46,16 L38,24 L38,52 L54,52 Z"/>
+                    <path d="M26,24 L32,16 L38,24"/>
+                </svg>
+                <div class="titulo-seccion-script">Vestimenta</div>
+                <div class="texto-detalle-bold" id="txt-dresscode">Formal</div>
+            </div>
+
+        </section>
+
+        <!-- SECCIÓN CONFIRMACIÓN (RSVP) -->
+        <section id="sec-confirmacion">
+            <div class="titulo-seccion-script">Asistencia</div>
+            <p class="texto-detalle">Esperamos que puedas acompañarnos.</p>
+            <a id="btn-confirmar" href="#" target="_blank" class="btn-general">Confirmar Asistencia</a>
+        </section>
+
+        <!-- GALERÍA DE FOTOS (CARRUSEL) -->
+        <section id="sec-galeria">
+            <div class="titulo-seccion-script">Galería</div>
+            <div class="carrusel-box">
+                <button class="carrusel-flecha prev" onclick="moverCarrusel(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                <div class="carrusel-track" id="carrusel-track"></div>
+                <button class="carrusel-flecha next" onclick="moverCarrusel(1)"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+        </section>
+
+        <!-- SECCIÓN REGALOS -->
+        <section id="sec-regalos">
+            <div class="titulo-seccion-script">Regalos</div>
+            <p class="texto-detalle">Tu presencia es lo más importante para nosotros.</p>
+            <button class="btn-general" onclick="abrirModalRegalos()"><i class="fa-solid fa-gift"></i> Ver Datos Bancarios</button>
+        </section>
+
+        <!-- SECCIONES OPCIONALES (PLAYLIST / ÁLBUM / INSTAGRAM) -->
+        <section id="sec-playlist">
+            <div class="titulo-seccion-script">Música</div>
+            <a id="btn-playlist" href="#" target="_blank" class="btn-general"><i class="fa-solid fa-music"></i> Sugerir Canción</a>
+        </section>
+
+        <section id="sec-album">
+            <div class="titulo-seccion-script">Fotos</div>
+            <a id="btn-album" href="#" target="_blank" class="btn-general"><i class="fa-solid fa-camera"></i> Subir Fotos</a>
+        </section>
+
+        <section id="sec-instagram">
+            <div class="titulo-seccion-script">Instagram</div>
+            <a id="btn-instagram" href="#" target="_blank" class="btn-general"><i class="fa-brands fa-instagram"></i> Ver Instagram</a>
+        </section>
+
+        <!-- DESPEDIDA -->
+        <section id="sec-nofaltes" style="margin-top: 20px;">
+            <div class="titulo-seccion-script" style="font-size: 3.5rem;">¡No Faltes!</div>
+        </section>
+
+    </div>
+
+    <!-- MODAL REGALOS -->
+    <div id="modal-regalos" class="modal">
+        <div class="modal-card">
+            <button class="cerrar-btn" onclick="cerrarModalRegalos()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="titulo-seccion-script">Datos Bancarios</div>
+            <p class="texto-detalle" id="modal-regalos-texto" style="margin-bottom: 15px;"></p>
+            <div style="text-align: left; background: #faf8f5; padding: 15px; border-radius: 8px; font-family: var(--fuente-serif); font-size: 1.1rem; margin-bottom: 15px;">
+                <p><strong>Banco:</strong> <span id="datos-banco"></span></p>
+                <p><strong>Titular:</strong> <span id="datos-titular"></span></p>
+                <p><strong>Tipo:</strong> <span id="datos-tipo"></span></p>
+                <p><strong>N° / CBU:</strong> <br><span id="datos-cuenta" style="font-weight: 600; color: var(--color-dorado);"></span></p>
+            </div>
+            <button class="btn-general" onclick="copiarCuenta()"><i class="fa-regular fa-copy"></i> Copiar Datos</button>
+        </div>
+    </div>
+
+    <!-- MODAL LIGHTBOX FOTO -->
+    <div id="modal-lightbox" class="modal">
+        <div style="position:relative; width: 100%; max-width: 500px; text-align: center;">
+            <button class="cerrar-btn" style="color: #fff; font-size: 2rem; top: -40px; right: 0;" onclick="cerrarLightbox()"><i class="fa-solid fa-xmark"></i></button>
+            <img id="lightbox-img" src="" style="width:100%; max-height: 80vh; border-radius: 8px; object-fit: contain;">
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast" class="toast">Texto copiado</div>
+
+    <!-- JAVASCRIPT Y CONFIGURACIÓN -->
+    <script>
+        /* =====================================================
+           CONFIGURACIÓN DE LA INVITACIÓN
+           ===================================================== */
+        const CONFIG = {
+            // Textos y Nombres
+            textoBienvenida: "Nos casamos", // o "Mis 15 Años" / "Cumpleaños"
+            nombreEvento: "José & Claudia",
+            fechaHoraTexto: "12 diciembre 2026, 19:00 hs.",
+            fechaISO: "2026-12-12T21:00:00",
+
+            // Ceremonia
+            ceremoniaHora: "Hora: 19:00 hs",
+            ceremoniaLugar: "Chacra San José",
+            ceremoniaDireccion: "Cno. de la Redención 7095.",
+
+            // Fiesta
+            fiestaHora: "Al finalizar la ceremonia.",
+            fiestaLugar: "Chacra San José",
+            fiestaDireccion: "Cno. de la Redención 7095.",
+            urlGoogleMaps: "https://maps.google.com",
+
+            // Vestimenta
+            dressCode: "Vestimenta Formal",
+
+            // Formulario Confirmación
+            urlConfirmacion: "https://forms.google.com",
+
+            // Datos Bancarios
+            textoRegalos: "Si deseas realizar un obsequio, puedes colaborar con nuestra luna de miel:",
+            banco: "Banco República",
+            titular: "José y Claudia",
+            tipoCuenta: "Caja de Ahorros",
+            numeroCuenta: "123-456789-0",
+
+            // Enlaces opcionales
+            urlPlaylist: "https://forms.google.com",
+            urlAlbum: "https://forms.google.com",
+            urlInstagram: "https://instagram.com",
+
+            // ACTIVAR O DESACTIVAR SECCIONES (true / false)
+            mostrarPlaylist: true,
+            mostrarAlbumCompartido: true,
+            mostrarInstagram: true,
+            mostrarDressCode: true,
+            mostrarRegalos: true,
+            mostrarGaleria: true,
+            mostrarConfirmacion: true,
+            mostrarMusica: true
+        };
+
+        /* =====================================================
+           LÓGICA DEL SISTEMA
+           ===================================================== */
+        let carruselIndex = 0;
+        const totalFotos = 10;
+        const audio = document.getElementById('audio-invitacion');
+        let reproduciendo = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarConfiguracion();
+            inicializarGaleria();
+            iniciarContador();
+            configurarHistorial();
+        });
+
+        function cargarConfiguracion() {
+            document.getElementById('portada-encabezado').innerText = CONFIG.textoBienvenida;
+            document.getElementById('txt-bienvenida').innerText = CONFIG.textoBienvenida;
+            document.getElementById('txt-nombre').innerText = CONFIG.nombreEvento;
+            document.getElementById('txt-fecha-hora').innerText = CONFIG.fechaHoraTexto;
+
+            document.getElementById('txt-ceremonia-hora').innerText = CONFIG.ceremoniaHora;
+            document.getElementById('txt-ceremonia-lugar').innerText = CONFIG.ceremoniaLugar;
+            document.getElementById('txt-ceremonia-dir').innerText = CONFIG.ceremoniaDireccion;
+
+            document.getElementById('txt-fiesta-hora').innerText = CONFIG.fiestaHora;
+            document.getElementById('txt-fiesta-lugar').innerText = CONFIG.fiestaLugar;
+            document.getElementById('txt-fiesta-dir').innerText = CONFIG.fiestaDireccion;
+            document.getElementById('btn-mapa').href = CONFIG.urlGoogleMaps;
+
+            document.getElementById('txt-dresscode').innerText = CONFIG.dressCode;
+            document.getElementById('btn-confirmar').href = CONFIG.urlConfirmacion;
+
+            document.getElementById('modal-regalos-texto').innerText = CONFIG.textoRegalos;
+            document.getElementById('datos-banco').innerText = CONFIG.banco;
+            document.getElementById('datos-titular').innerText = CONFIG.titular;
+            document.getElementById('datos-tipo').innerText = CONFIG.tipoCuenta;
+            document.getElementById('datos-cuenta').innerText = CONFIG.numeroCuenta;
+
+            document.getElementById('btn-playlist').href = CONFIG.urlPlaylist;
+            document.getElementById('btn-album').href = CONFIG.urlAlbum;
+            document.getElementById('btn-instagram').href = CONFIG.urlInstagram;
+
+            toggleDisplay('sec-playlist', CONFIG.mostrarPlaylist);
+            toggleDisplay('sec-album', CONFIG.mostrarAlbumCompartido);
+            toggleDisplay('sec-instagram', CONFIG.mostrarInstagram);
+            toggleDisplay('sec-dresscode', CONFIG.mostrarDressCode);
+            toggleDisplay('sec-regalos', CONFIG.mostrarRegalos);
+            toggleDisplay('sec-galeria', CONFIG.mostrarGaleria);
+            toggleDisplay('sec-confirmacion', CONFIG.mostrarConfirmacion);
+        }
+
+        function toggleDisplay(id, condicion) {
+            const el = document.getElementById(id);
+            if (el) el.classList.toggle('oculto', !condicion);
+        }
+
+        function abrirInvitacion() {
+            document.getElementById('portada').classList.add('abierto');
+            if (CONFIG.mostrarMusica) toggleMusica();
+        }
+
+        function toggleMusica() {
+            const icon = document.getElementById('btn-play-icon');
+            if (reproduciendo) {
+                audio.pause();
+                reproduciendo = false;
+                icon.innerHTML = '<i class="fa-solid fa-play"></i>';
+            } else {
+                audio.play().then(() => {
+                    reproduciendo = true;
+                    icon.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                }).catch(() => {});
+            }
+        }
+
+        function iniciarContador() {
+            const destino = new Date(CONFIG.fechaISO).getTime();
+            setInterval(() => {
+                const diff = destino - new Date().getTime();
+                if (diff <= 0) {
+                    document.getElementById('contador-string').innerText = "0 : 00 : 00 : 00";
+                    return;
+                }
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const hh = h < 10 ? '0' + h : h;
+                const mm = m < 10 ? '0' + m : m;
+                const ss = s < 10 ? '0' + s : s;
+
+                document.getElementById('contador-string').innerText = `${d} : ${hh} : ${mm} : ${ss}`;
+            }, 1000);
+        }
+
+        function inicializarGaleria() {
+            const track = document.getElementById('carrusel-track');
+            for (let i = 1; i <= totalFotos; i++) {
+                const slide = document.createElement('div');
+                slide.className = 'carrusel-slide';
+                slide.innerHTML = `<img src="./foto${i}.jpg" loading="lazy" alt="Foto ${i}" onclick="abrirLightbox('./foto${i}.jpg')">`;
+                track.appendChild(slide);
+            }
+        }
+
+        function moverCarrusel(dir) {
+            carruselIndex = (carruselIndex + dir + totalFotos) % totalFotos;
+            document.getElementById('carrusel-track').style.transform = `translateX(-${carruselIndex * 100}%)`;
+        }
+
+        /* --- CONTROL DEL BOTÓN ATRÁS (HISTORY API) --- */
+        function configurarHistorial() {
+            window.addEventListener('popstate', () => {
+                cerrarModalDOM('modal-regalos');
+                cerrarModalDOM('modal-lightbox');
+            });
+        }
+
+        function abrirModalRegalos() {
+            document.getElementById('modal-regalos').classList.add('activo');
+            history.pushState({ modal: 'regalos' }, '', '#regalos');
+        }
+
+        function cerrarModalRegalos() {
+            if (history.state && history.state.modal === 'regalos') history.back();
+            else cerrarModalDOM('modal-regalos');
+        }
+
+        function abrirLightbox(src) {
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('modal-lightbox').classList.add('activo');
+            history.pushState({ modal: 'lightbox' }, '', '#foto');
+        }
+
+        function cerrarLightbox() {
+            if (history.state && history.state.modal === 'lightbox') history.back();
+            else cerrarModalDOM('modal-lightbox');
+        }
+
+        function cerrarModalDOM(id) {
+            document.getElementById(id).classList.remove('activo');
+        }
+
+        function copiarCuenta() {
+            navigator.clipboard.writeText(CONFIG.numeroCuenta).then(() => {
+                const toast = document.getElementById('toast');
+                toast.classList.add('visible');
+                setTimeout(() => toast.classList.remove('visible'), 2000);
+            });
+        }
+    </script>
+</body>
+</html>
