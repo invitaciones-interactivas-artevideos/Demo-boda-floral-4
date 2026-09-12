@@ -24,7 +24,6 @@
             --color-dorado: #b89762;
             --color-dorado-suave: #d9c39e;
             --color-boton-plateado: linear-gradient(180deg, #e8e8e8 0%, #c5c5c5 100%);
-            --color-sello: #7a4e32;
             
             --fuente-script: 'Alex Brush', cursive;
             --fuente-serif: 'Cormorant Garamond', serif;
@@ -65,22 +64,24 @@
         }
 
         /* =====================================================
-           AJUSTES DE IMÁGENES (Fáciles de modificar por ti)
+           AJUSTES DE IMÁGENES
            ===================================================== */
         
-        /* Imagen superior e inferior (arriba.png) */
+        /* Imagen superior (arriba.png) */
         .img-arriba-top {
-            width: 85%;                 /* Modifica el ancho */
-            max-width: 350px;
-            margin: 30px auto 10px auto; /* Espaciado: arriba, derecha, abajo, izquierda */
+            width: 85%;                 
+            max-width: 280px;
+            margin: 30px auto 10px auto; 
             display: block;
             position: relative;
             z-index: 2;
         }
+        
+        /* Imagen inferior independiente (arriba.png) */
         .img-arriba-bottom {
             width: 85%;
-            max-width: 350px;
-            margin: 10px auto 50px auto;
+            max-width: 300px;
+            margin: 20px auto 50px auto;
             display: block;
             position: relative;
             z-index: 2;
@@ -89,25 +90,44 @@
         /* Imagen de flores en el contador (circulo.png) */
         .img-circulo-contador {
             position: absolute;
-            width: 140px;      /* Tamaño de las flores del círculo */
-            bottom: -25px;     /* Ajusta para subir o bajar la imagen dentro del círculo */
+            width: 90px;       /* Reducido para no tapar los números */
+            bottom: -15px;     
             left: 50%;
-            transform: translateX(-50%); /* Esto la mantiene siempre centrada */
+            transform: translateX(-50%); 
             z-index: 4;
         }
 
-        /* Imágenes florales decorativas de fondo (imagen2.png) */
+        /* =====================================================
+           IMÁGENES DECORATIVAS (imagen2.png)
+           Ajusta su tamaño y posición de forma independiente.
+           ===================================================== */
         .img-decor {
             position: absolute;
-            width: 180px;      /* Tamaño base de las flores esquinadas */
-            z-index: 1;        /* Se queda detrás del texto (el texto tiene z-index: 3) */
-            opacity: 0.8;      /* Nivel de transparencia (1 es sólido, 0.5 es medio transparente) */
-            pointer-events: none; /* Evita que molesten al tocar la pantalla */
+            z-index: 1;        
+            opacity: 0.85;      
+            pointer-events: none; 
         }
-        /* Posiciones específicas a lo largo de la invitación para imagen2.png */
-        .decor-1 { top: 12%; left: -40px; transform: rotate(15deg); }
-        .decor-2 { top: 40%; right: -50px; transform: scaleX(-1) rotate(-20deg); width: 160px; }
-        .decor-3 { bottom: 18%; left: -30px; transform: rotate(45deg); width: 140px; }
+        
+        #decoracion-1 {
+            width: 150px;
+            top: -20px;
+            left: -60px;
+            transform: rotate(0deg);
+        }
+        
+        #decoracion-2 {
+            width: 140px;
+            top: -30px;
+            right: -60px;
+            transform: scaleX(-1) rotate(0deg);
+        }
+        
+        #decoracion-3 {
+            width: 130px;
+            bottom: -30px;
+            left: -60px;
+            transform: rotate(0deg);
+        }
 
 
         /* =====================================================
@@ -134,63 +154,70 @@
             color: #4a423a; margin-bottom: 30px; text-transform: uppercase;
         }
 
-        /* Estructura del Sobre 3D */
+        /* Estructura del Sobre 3D más realista */
         .sobre-wrapper {
             position: relative;
             width: 100%; max-width: 340px; height: 230px;
             cursor: pointer;
-            perspective: 1200px; /* Importante para el efecto 3D */
+            perspective: 1200px; 
         }
 
         .sobre-atras {
             position: absolute; inset: 0;
-            background: #e0d8cd;
+            background: #d5cabc; /* Interior sutilmente más oscuro */
             border-radius: 8px;
         }
 
         .sobre-frente {
             position: absolute; inset: 0;
             background: #ffffff;
-            clip-path: polygon(0 100%, 100% 100%, 100% 35%, 50% 65%, 0 35%);
+            /* Se ajusta el corte para que la solapa superior solape perfectamente */
+            clip-path: polygon(0 100%, 100% 100%, 100% 30%, 50% 65%, 0 30%);
             border-radius: 0 0 8px 8px;
             z-index: 3;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
         }
 
         .sobre-solapa {
-            position: absolute; top: 0; left: 0; width: 100%; height: 150px;
+            position: absolute; top: 0; left: 0; width: 100%; 
+            height: 75%; /* Llega más abajo para verse cerrado */
             background: #fdfbf7;
             clip-path: polygon(0 0, 100% 0, 50% 100%);
             transform-origin: top;
             transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 4;
-            display: flex; align-items: flex-end; justify-content: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            z-index: 4; /* Se superpone al frente */
         }
 
         /* Animación de apertura */
         .sobre-wrapper.abriendo .sobre-solapa {
             transform: rotateX(180deg);
-            z-index: 1; /* Se va hacia atrás */
+            z-index: 1; 
         }
 
+        /* Lacre delicado ajustado */
         .sello-cera {
-            width: 70px; height: 70px;
-            background: radial-gradient(circle at 30% 30%, #a0633f, #63381e);
+            position: absolute;
+            bottom: 15px; /* Ubicado en la punta de la solapa */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 45px; height: 45px;
+            background: radial-gradient(circle at 30% 30%, #c4a77d, #8f734a); /* Tono dorado/bronce refinado */
             border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            color: #d1ab7f; font-size: 1.8rem;
-            box-shadow: 0 4px 12px rgba(99, 56, 30, 0.4), inset 0 0 8px rgba(0,0,0,0.3);
-            border: 2px solid #855333;
+            color: #ffffff; font-size: 1.1rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2), inset 0 0 5px rgba(255,255,255,0.3);
+            border: 1px solid #7a5e3a;
             transition: opacity 0.3s, transform 0.2s;
             animation: pulso 2s infinite;
         }
 
-        .sobre-wrapper:active .sello-cera { transform: scale(0.95); }
+        .sobre-wrapper:active .sello-cera { transform: translateX(-50%) scale(0.95); }
         .sobre-wrapper.abriendo .sello-cera { opacity: 0; }
 
-        @keyframes pulso { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+        @keyframes pulso { 
+            0%, 100% { transform: translateX(-50%) scale(1); } 
+            50% { transform: translateX(-50%) scale(1.05); } 
+        }
 
         .texto-instruccion-sobre {
             font-family: var(--fuente-serif); font-style: italic; font-size: 1.3rem;
@@ -199,12 +226,16 @@
 
 
         /* =====================================================
-           CONTENIDO PRINCIPAL
+           CONTENIDO PRINCIPAL Y SEPARACIÓN ARMONIOSA
            ===================================================== */
         section {
-            padding: 10px 20px;
+            padding: 30px 20px;
+            margin-bottom: 40px; /* Separación armoniosa entre secciones */
             position: relative;
-            z-index: 3; /* Asegura que el texto esté por encima de la decoración */
+            z-index: 3; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .titulo-evento-chico { font-size: 1.5rem; color: #38322c; margin-top: 15px; }
@@ -213,7 +244,7 @@
 
 
         /* =====================================================
-           BOTÓN MÚSICA FLOTANTE (Fijo Abajo Derecha)
+           BOTÓN MÚSICA FLOTANTE
            ===================================================== */
         .btn-musica-fijo {
             position: fixed;
@@ -255,12 +286,12 @@
         .icono-lineal { width: 60px; height: auto; margin-bottom: 8px; opacity: 0.85; }
         .titulo-seccion-script { font-family: var(--fuente-script); font-size: 2.8rem; color: #2c2825; line-height: 1; margin-bottom: 8px; }
         .texto-detalle-bold { font-weight: 600; font-size: 1.25rem; color: #2c2825; }
-        .texto-detalle { font-size: 1.15rem; color: #4a423a; margin-bottom: 3px; }
-        .separador-bloque { margin: 35px 0; position: relative; z-index: 3;}
+        .texto-detalle { font-size: 1.15rem; color: #4a423a; margin-bottom: 12px; max-width: 85%; }
+        .separador-bloque { margin: 25px 0; position: relative; z-index: 3; width: 100%; display: flex; flex-direction: column; align-items: center; }
 
 
         /* =====================================================
-           BOTONES UNIFICADOS (Diseño Cápsula Plateada)
+           BOTONES UNIFICADOS
            ===================================================== */
         .btn-capsula {
             display: inline-flex;
@@ -338,11 +369,6 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <div class="invitacion-container">
 
-        <!-- IMAGENES DECORATIVAS DE FONDO (imagen2.png) -->
-        <img src="./imagen2.png" class="img-decor decor-1" alt="">
-        <img src="./imagen2.png" class="img-decor decor-2" alt="">
-        <img src="./imagen2.png" class="img-decor decor-3" alt="">
-
         <!-- IMAGEN ARRIBA -->
         <img src="./arriba.png" class="img-arriba-top" alt="Decoración floral">
 
@@ -364,13 +390,15 @@
                     <span>SEGUNDOS</span>
                 </div>
 
-                <!-- IMAGEN CIRCULO EN LA BASE -->
+                <!-- IMAGEN CIRCULO EN LA BASE (Más pequeña) -->
                 <img src="./circulo.png" class="img-circulo-contador" alt="Flores">
             </div>
         </section>
 
         <!-- SECCIÓN DETALLES Y EVENTOS -->
         <section id="sec-eventos">
+            <!-- Imagen Decorativa 1 (Activada/Desactivada por JS) -->
+            <img src="./imagen2.png" id="decoracion-1" class="img-decor" alt="">
             
             <!-- CEREMONIA -->
             <div class="separador-bloque" id="bloque-ceremonia">
@@ -410,13 +438,19 @@
         <!-- SECCIÓN CONFIRMACIÓN (RSVP) -->
         <section id="sec-confirmacion">
             <div class="titulo-seccion-script">Asistencia</div>
-            <p class="texto-detalle">Esperamos que puedas acompañarnos.</p>
+            <p class="texto-detalle">Esperamos de corazón que puedas acompañarnos en este día tan especial.</p>
             <a id="btn-confirmar" href="#" target="_blank" class="btn-capsula">Confirmar Asistencia</a>
         </section>
 
         <!-- GALERÍA DE FOTOS (CARRUSEL) -->
         <section id="sec-galeria">
+            <!-- Imagen Decorativa 2 -->
+            <img src="./imagen2.png" id="decoracion-2" class="img-decor" alt="">
+            
             <div class="titulo-seccion-script">Galería</div>
+            <div style="font-size: 0.9rem; color: var(--color-texto-suave); font-style: italic; margin-bottom: 10px;">
+                Desliza para ver más <i class="fa-solid fa-arrows-left-right" style="margin-left: 5px;"></i>
+            </div>
             <div class="carrusel-box">
                 <button class="carrusel-flecha prev" onclick="moverCarrusel(-1)"><i class="fa-solid fa-chevron-left"></i></button>
                 <div class="carrusel-track" id="carrusel-track"></div>
@@ -427,32 +461,38 @@
         <!-- SECCIÓN REGALOS -->
         <section id="sec-regalos">
             <div class="titulo-seccion-script">Regalos</div>
-            <p class="texto-detalle">Tu presencia es lo más importante para nosotros.</p>
+            <p class="texto-detalle">Tu presencia es lo más importante para nosotros.Si deseas ayudanos con nuestra luna de miel, aquí tienes los datos:</p>
             <button class="btn-capsula" onclick="abrirModalRegalos()"><i class="fa-solid fa-gift"></i> Ver Datos Bancarios</button>
         </section>
 
-        <!-- SECCIONES OPCIONALES -->
+        <!-- SECCIONES OPCIONALES CON EXPLICATIVOS -->
         <section id="sec-playlist">
             <div class="titulo-seccion-script">Música</div>
+            <p class="texto-detalle">Ayúdanos a armar la playlist. Sugiérenos esa canción que no puede faltar en la fiesta.</p>
             <a id="btn-playlist" href="#" target="_blank" class="btn-capsula"><i class="fa-solid fa-music"></i> Sugerir Canción</a>
         </section>
 
         <section id="sec-album">
+            <!-- Imagen Decorativa 3 -->
+            <img src="./imagen2.png" id="decoracion-3" class="img-decor" alt="">
+            
             <div class="titulo-seccion-script">Fotos</div>
+            <p class="texto-detalle">Ayúdanos a capturar cada instante. Comparte las fotos y videos que tomes durante el evento aquí.</p>
             <a id="btn-album" href="#" target="_blank" class="btn-capsula"><i class="fa-solid fa-camera"></i> Subir Fotos</a>
         </section>
 
         <section id="sec-instagram">
             <div class="titulo-seccion-script">Instagram</div>
+            <p class="texto-detalle">Acompáñanos en nuestras redes. Utiliza nuestro hashtag oficial al subir tus historias.</p>
             <a id="btn-instagram" href="#" target="_blank" class="btn-capsula"><i class="fa-brands fa-instagram"></i> Ver Instagram</a>
         </section>
 
         <!-- DESPEDIDA -->
-        <section id="sec-nofaltes" style="margin-top: 30px;">
+        <section id="sec-nofaltes">
             <div class="titulo-seccion-script" style="font-size: 3.5rem;">¡No Faltes!</div>
         </section>
 
-        <!-- IMAGEN ABAJO -->
+        <!-- IMAGEN ABAJO (Más pequeña e independiente) -->
         <img src="./arriba.png" class="img-arriba-bottom" alt="Decoración floral">
 
     </div>
@@ -467,7 +507,7 @@
                 <p><strong>Banco:</strong> <span id="datos-banco"></span></p>
                 <p><strong>Titular:</strong> <span id="datos-titular"></span></p>
                 <p><strong>Tipo:</strong> <span id="datos-tipo"></span></p>
-                <p><strong>N° / CBU:</strong> <br><span id="datos-cuenta" style="font-weight: 600; color: var(--color-dorado);"></span></p>
+                <p><strong>N° de cuenta:</strong> <br><span id="datos-cuenta" style="font-weight: 600; color: var(--color-dorado);"></span></p>
             </div>
             <button class="btn-capsula" onclick="copiarCuenta()"><i class="fa-regular fa-copy"></i> Copiar Datos</button>
         </div>
@@ -513,14 +553,20 @@
             urlInstagram: "https://instagram.com",
 
             // ACTIVAR O DESACTIVAR SECCIONES (true / false)
+            mostrarCeremonia: true,
+            mostrarGaleria: true,
             mostrarPlaylist: true,
             mostrarAlbumCompartido: true,
             mostrarInstagram: true,
             mostrarDressCode: true,
             mostrarRegalos: true,
-            mostrarGaleria: true,
             mostrarConfirmacion: true,
-            mostrarMusica: true
+            mostrarMusica: true,
+            
+            // ACTIVAR O DESACTIVAR IMÁGENES DECORATIVAS INDIVIDUALES (imagen2.png)
+            mostrarDecoracion1: true,
+            mostrarDecoracion2: true,
+            mostrarDecoracion3: true
         };
 
         /* =====================================================
@@ -566,13 +612,20 @@
             document.getElementById('btn-album').href = CONFIG.urlAlbum;
             document.getElementById('btn-instagram').href = CONFIG.urlInstagram;
 
+            // Gestión de visibilidad de secciones
+            toggleDisplay('bloque-ceremonia', CONFIG.mostrarCeremonia);
+            toggleDisplay('sec-galeria', CONFIG.mostrarGaleria);
             toggleDisplay('sec-playlist', CONFIG.mostrarPlaylist);
             toggleDisplay('sec-album', CONFIG.mostrarAlbumCompartido);
             toggleDisplay('sec-instagram', CONFIG.mostrarInstagram);
             toggleDisplay('sec-dresscode', CONFIG.mostrarDressCode);
             toggleDisplay('sec-regalos', CONFIG.mostrarRegalos);
-            toggleDisplay('sec-galeria', CONFIG.mostrarGaleria);
             toggleDisplay('sec-confirmacion', CONFIG.mostrarConfirmacion);
+            
+            // Gestión de visibilidad de imágenes decorativas
+            toggleDisplay('decoracion-1', CONFIG.mostrarDecoracion1);
+            toggleDisplay('decoracion-2', CONFIG.mostrarDecoracion2);
+            toggleDisplay('decoracion-3', CONFIG.mostrarDecoracion3);
 
             if(!CONFIG.mostrarMusica) {
                 document.getElementById('btn-musica-flotante').classList.add('oculto');
@@ -591,7 +644,7 @@
             // 1. Inicia la animación de apertura de la solapa
             sobre.classList.add('abriendo');
 
-            // 2. Espera a que termine la animación (700ms) y luego desliza la pantalla
+            // 2. Espera a que termine la animación y luego desliza la pantalla
             setTimeout(() => {
                 portada.classList.add('abierto');
                 if (CONFIG.mostrarMusica) toggleMusica();
